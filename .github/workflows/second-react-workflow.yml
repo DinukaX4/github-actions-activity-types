@@ -4,6 +4,9 @@ on:
     types:
       - opened
   workflow_dispatch:
+env:
+  MAX_FILE_SIZE: 1048576 # 1 MB
+  MIN_FILE_SIZE: 0 # empty file
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -18,3 +21,19 @@ jobs:
         run: npm run build
       - name: Deploy
         run: echo "Deploying..."
+      - name: Check file size
+        run: |
+          git fetch origin ${GITHUB_BASE_REF}
+          git fetch origin ${GITHUB_HEAD_REF}
+          git diff --diff-filter=A --no-renames --name-only origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
+          | grep -v '\.mps$' \
+          | while read FILE; do
+              if ! git lfs ls-files "$FILE" &> /dev/null && [ $(wc -c < "$FILE") -gt $MAX_FILE_SIZE ]; then
+                MAX_FILE_SIZE_MB=$((MAX_FILE_SIZE / 1048576))
+                echo "::error file=$FILE::File size exceeds ${MAX_FILE_SIZE_MB} MB limit"
+                exit 1
+              if ! git lfs ls-files "$FILE" &> /dev/null && [ $(wc -c < "$FILE") -lte $MIN_FILE_SIZE ]; then
+                echo "::error file=$FILE::File is empty"
+                exit 1
+              fi
+          done
