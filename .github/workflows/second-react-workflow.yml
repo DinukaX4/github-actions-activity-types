@@ -25,7 +25,7 @@ jobs:
         run: |
           git fetch origin ${GITHUB_BASE_REF}
           git fetch origin ${GITHUB_HEAD_REF}
-          git diff --diff-filter=A --no-renames --name-only origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
+          git diff --diff-filter=A --no-renames --name-only origin/develop origin/main \
           | while read FILE; do
               if ! git lfs ls-files "$FILE" &> /dev/null && [ $(wc -c < "$FILE") -gt $MAX_FILE_SIZE ]; then
                 MAX_FILE_SIZE_MB=$((MAX_FILE_SIZE / 1048576))
