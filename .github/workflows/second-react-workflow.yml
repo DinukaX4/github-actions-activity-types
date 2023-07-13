@@ -1,4 +1,4 @@
-name: Second React workflow
+name: Activity types workflow
 on:
   pull_request:
     types:
