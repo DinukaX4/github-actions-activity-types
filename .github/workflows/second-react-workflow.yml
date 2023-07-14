@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 env:
   MAX_FILE_SIZE: 1048576 # 1 MB
-  MIN_FILE_SIZE: 0 # empty file
 jobs:
   deploy:
     runs-on: ubuntu-latest
