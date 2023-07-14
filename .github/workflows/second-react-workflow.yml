@@ -35,7 +35,7 @@ jobs:
               fi
           done
           git diff --diff-filter=A --no-renames --name-only origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
-          | grep -v '.mps$' \
+          | grep -v .mps \
           | while read FILE; do
               if [ $(wc -c < "$FILE") -le 0 ]; then
                 echo "::error file=$FILE::File is empty"
