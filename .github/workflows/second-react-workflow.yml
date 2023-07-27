@@ -1,7 +1,8 @@
 name: Activity types workflow
 on:
   push:
-    branches: develop
+    branches: 
+    - develop
   workflow_dispatch:
 env:
   MAX_FILE_SIZE: 1048576 # 1 MB
